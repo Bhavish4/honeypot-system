@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Honeypot ML Security Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+        }
+        .chart-box {
+            width: 80%;
+            margin: 40px auto;
+            background: #020617;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🛡️ Honeypot ML Attack Monitoring Dashboard</h1>
+
+<div class="chart-box">
+    <canvas id="attackCountChart"></canvas>
+</div>
+
+<div class="chart-box">
+    <canvas id="confidenceChart"></canvas>
+</div>
+
+<script>
+fetch("/stats")
+.then(response => response.json())
+.then(data => {
+    const labels = data.map(d => d._id);
+    const counts = data.map(d => d.count);
+    const confidence = data.map(d => d.avg_confidence.toFixed(2));
+
+    // Attack Count Chart
+    new Chart(document.getElementById("attackCountChart"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Number of Attacks",
+                data: counts
+            }]
+        }
+    });
+
+    // Confidence Chart
+    new Chart(document.getElementById("confidenceChart"), {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Average ML Confidence",
+                data: confidence,
+                tension: 0.3
+            }]
+        }
+    });
+});
+</script>
+
+</body>
+</html>

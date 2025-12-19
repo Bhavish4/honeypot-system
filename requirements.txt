@@ -1,0 +1,5 @@
+flask
+paramiko
+pymongo
+numpy
+pandas
