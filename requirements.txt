@@ -1,5 +1,6 @@
 flask
-paramiko
 pymongo
-numpy
+paramiko
+scikit-learn
 pandas
+numpy
