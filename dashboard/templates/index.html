@@ -36,38 +36,42 @@
 </div>
 
 <script>
-fetch("/stats")
-.then(response => response.json())
-.then(data => {
-    const labels = data.map(d => d._id);
-    const counts = data.map(d => d.count);
-    const confidence = data.map(d => d.avg_confidence.toFixed(2));
+const attackChartCtx = document.getElementById("attackCountChart");
+const confidenceChartCtx = document.getElementById("confidenceChart");
 
-    // Attack Count Chart
-    new Chart(document.getElementById("attackCountChart"), {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Number of Attacks",
-                data: counts
-            }]
-        }
-    });
+let attackChart, confidenceChart;
 
-    // Confidence Chart
-    new Chart(document.getElementById("confidenceChart"), {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Average ML Confidence",
-                data: confidence,
-                tension: 0.3
-            }]
-        }
+function loadData() {
+    fetch("/stats")
+    .then(res => res.json())
+    .then(data => {
+        const labels = data.map(d => d._id);
+        const counts = data.map(d => d.count);
+        const confidence = data.map(d => d.avg_confidence.toFixed(2));
+
+        if (attackChart) attackChart.destroy();
+        if (confidenceChart) confidenceChart.destroy();
+
+        attackChart = new Chart(attackChartCtx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{ label: "Attack Count", data: counts }]
+            }
+        });
+
+        confidenceChart = new Chart(confidenceChartCtx, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{ label: "ML Confidence", data: confidence }]
+            }
+        });
     });
-});
+}
+
+loadData();
+setInterval(loadData, 3000);
 </script>
 
 </body>
